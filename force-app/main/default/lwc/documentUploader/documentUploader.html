@@ -1,0 +1,32 @@
+<template>
+    <lightning-input
+            type="file"
+            label="Attachment"
+            accept="image/png, .zip"
+            onchange={handleFilesChange}
+            multiple
+    >
+    </lightning-input>
+
+    <input type="file" id="file" multiple onchange={handleFilesChange}/>
+    <lightning-button
+            label="Upload File"
+            onclick={handleFilesChange}
+            variant="neutral">
+    </lightning-button>
+
+
+    <div class="slds-hide">
+        <iframe src="/apex/UploadFile"></iframe>
+    </div>
+
+    <div if:false={isLoaded} class="slds-is-relative">
+        <lightning-spinner
+                alternative-text="Loading..." variant="brand">
+        </lightning-spinner>
+    </div>
+
+    <lightning-input type="file" label="Attachment" onchange={handleFilesChange}>
+    </lightning-input>
+    <button onclick={fireToVF}> fire</button>
+</template>

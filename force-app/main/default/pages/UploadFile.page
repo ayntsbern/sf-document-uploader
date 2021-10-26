@@ -1,0 +1,37 @@
+<apex:page showHeader="false" sidebar="false" applyBodyTag="false" standardStylesheets="false" >
+    
+    <script type="text/javascript">__sfdcSessionId = '{!$Api.Session_Id}';</script>
+    <script src="../../soap/ajax/53.0/connection.js" type="text/javascript"></script>
+    
+    <script>
+    function uploadContentVersion(recordId ,filename, filecontent) {
+        var contentVersion = new sforce.SObject('ContentVersion');
+        
+        contentVersion.Title = filename;
+        contentVersion.PathOnClient = '/' + filename;
+        contentVersion.FirstPublishLocationId = recordId;
+        contentVersion.VersionData = filecontent;
+        
+        var results = sforce.connection.create([contentVersion]);
+        for (var i = 0; i < results.length; i++) {
+            if (results[i].getBoolean("success")) {
+<!--                alert('New ContentVersion record created:' + results[i].id);-->
+                window.parent.postMessage('loaded', "*")
+            }
+            else {
+                alert('Failed:' + results[i]);
+            }
+        }
+    }
+    
+    window.addEventListener('message', (message)=>{
+        console.log(message.data);
+        var file = message.data;
+        uploadContentVersion(file.parentRec, file.fileName , file.fileContent);
+    });
+        
+<!--    window.parent.postMessage('loaded', "*")-->
+    </script>
+    
+    <body></body>
+</apex:page>
